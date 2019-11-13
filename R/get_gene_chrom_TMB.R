@@ -20,24 +20,24 @@ get_gene_chrom_TMB <- function(bed,gen,map,seg.size){
     print(x)
 
     # sub map #
-    map.sub <- map %>%
+    map <- map %>%
       filter(chrom == paste0("chr",x))
 
-    gen.sub <- gen %>%
+    gen <- gen %>%
       filter(chromosome == x)
 
     # subset to that chromosome #
-    bed.sub <- bed %>%
+    bed <- bed %>%
       filter(Chromosome == paste0("chr",x)) %>%
       select(start,end,signal) %>%
       mutate_all(as.numeric)
 
-    info <- as.data.frame(t(apply(map.sub[1:2,],1,function(y){
+    info <- as.data.frame(t(apply(map[1:5,],1,function(y){
       range <- c(as.numeric(y[3])-seg.size,as.numeric(y[4])+seg.size)
-      mean.bed <- mean(unlist(bed.sub %>%
+      mean.bed <- mean(unlist(bed %>%
                                 filter(start >= range[1], end <= range[2]) %>%
                                 select(signal)))
-      tmb <- mean(unlist(gen.sub %>%
+      tmb <- mean(unlist(gen %>%
                            filter(chromosome_start >= range[1], chromosome_end <= range[2]) %>%
                            group_by(as.character(submitted_sample_id)) %>%
                            summarise(N = n()) %>%
@@ -46,9 +46,38 @@ get_gene_chrom_TMB <- function(bed,gen,map,seg.size){
       out <- c(unlist(y),mean.bed,tmb)
       out[3:6] <- as.numeric(out[3:6])
       return(out)
+
+    # # sub map #
+    # map.sub <- map %>%
+    #   filter(chrom == paste0("chr",x))
+    #
+    # gen.sub <- gen %>%
+    #   filter(chromosome == x)
+    #
+    # # subset to that chromosome #
+    # bed.sub <- bed %>%
+    #   filter(Chromosome == paste0("chr",x)) %>%
+    #   select(start,end,signal) %>%
+    #   mutate_all(as.numeric)
+    #
+    # info <- as.data.frame(t(apply(map.sub[1:2,],1,function(y){
+    #   range <- c(as.numeric(y[3])-seg.size,as.numeric(y[4])+seg.size)
+    #   mean.bed <- mean(unlist(bed.sub %>%
+    #                             filter(start >= range[1], end <= range[2]) %>%
+    #                             select(signal)))
+    #   tmb <- mean(unlist(gen.sub %>%
+    #                        filter(chromosome_start >= range[1], chromosome_end <= range[2]) %>%
+    #                        group_by(as.character(submitted_sample_id)) %>%
+    #                        summarise(N = n()) %>%
+    #                        select(N)))
+    #
+    #   out <- c(unlist(y),mean.bed,tmb)
+    #   out[3:6] <- as.numeric(out[3:6])
+    #   return(out)
     })))
     colnames(info)[5:6] <- c("ChromAccess","TMB")
     return(info)
   })
-  return(data.table(do.call('rbind',final)))
+  return(final)
+  # return(data.table(do.call('rbind',final)))
 }
