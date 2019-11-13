@@ -46,4 +46,5 @@ chrom_profile <- function(bed,gen,seg.size){
     scaled.full$Position <- full.dat$Position
     return(scaled.full)
   })))
+  return(final)
 }
