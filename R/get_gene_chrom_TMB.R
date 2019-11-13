@@ -16,7 +16,7 @@
 
 get_gene_chrom_TMB <- function(bed,gen,map,seg.size){
 
-  final <- data.table(do.call('rbind',lapply(c(1:22,"X"),function(x){
+  final <- lapply(c(1:22,"X"),function(x){
     print(x)
 
     # sub map #
@@ -38,17 +38,17 @@ get_gene_chrom_TMB <- function(bed,gen,map,seg.size){
                                 filter(start >= range[1], end <= range[2]) %>%
                                 select(signal)))
       tmb <- mean(unlist(gen.sub %>%
-                    filter(chromosome_start >= range[1], chromosome_end <= range[2]) %>%
-                    group_by(as.character(submitted_sample_id)) %>%
-                    summarise(N = n()) %>%
-                    select(N)))
+                           filter(chromosome_start >= range[1], chromosome_end <= range[2]) %>%
+                           group_by(as.character(submitted_sample_id)) %>%
+                           summarise(N = n()) %>%
+                           select(N)))
 
       out <- c(unlist(y),mean.bed,tmb)
       out[3:6] <- as.numeric(out[3:6])
       return(out)
     })))
     colnames(info)[5:6] <- c("ChromAccess","TMB")
-  return(info)
-  })))
-return(final)
+    return(info)
+  })
+  return(data.table(do.call('rbind',final)))
 }
