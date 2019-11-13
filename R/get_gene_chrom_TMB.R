@@ -16,11 +16,6 @@
 
 get_gene_chrom_TMB <- function(bed,gen,map,seg.size){
 
-  # get the equivalent segments for the gene mapping #
-  map <- map %>%
-    mutate(start.mb = trunc(as.numeric(as.character(start))/seg.size),
-           end.mb = trunc(as.numeric(as.character(end))/seg.size))
-
   final <- data.table(do.call('rbind',lapply(c(1:22,"X"),function(x){
     print(x)
 
