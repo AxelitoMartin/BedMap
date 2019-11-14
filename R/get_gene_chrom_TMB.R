@@ -14,32 +14,39 @@
 #'@export
 #'
 
-get_gene_chrom_TMB <- function(bed,gen,map,seg.size){
+get_gene_chrom_TMB <- function(bed,gen,map,seg.size,cores=1){
 
   # final <- lapply(c(1:22,"X"),function(x){
-  final <- data.frame()
-  for(x in c(1:22,"X")){
-    print(x)
+  # final <- data.frame()
+  # for(x in c(1:22,"X")){
 
-    # sub map #
-    map.sub <- map %>%
-      filter(chrom == paste0("chr",x))
+  cl <- makeCluster(cores,outfile="progress.txt")
+  registerDoParallel(cl)
 
-    gen.sub <- gen %>%
-      filter(chromosome == x)
+  foreach(x=c(1:22,"X")){
+    cat(x)
 
-    # subset to that chromosome #
-    bed.sub <- bed %>%
-      filter(Chromosome == paste0("chr",x)) %>%
-      select(start,end,signal) %>%
-      mutate_all(as.numeric)
+    # # sub map #
+    # map.sub <- map %>%
+    #   filter(chrom == paste0("chr",x))
+    #
+    # gen.sub <- gen %>%
+    #   filter(chromosome == x)
+    #
+    # # subset to that chromosome #
+    # bed.sub <- bed %>%
+    #   filter(Chromosome == paste0("chr",x)) %>%
+    #   select(start,end,signal) %>%
+    #   mutate_all(as.numeric)
+
+    bed.sub <- bed[Chromosome == paste0("chr",x),c("start","end","signal")]
+    gen.sub <- gen[chromosome == x,]
+    map.sub <- map[chrom == paste0("chr",x),]
 
     info <- as.data.frame(t(apply(map.sub,1,function(y){
-      print(as.character(y[1]))
+      cat(as.character(y[1]))
       range <- c(as.numeric(y[3])-seg.size,as.numeric(y[4])+seg.size)
-      mean.bed <- mean(unlist(bed.sub %>%
-                                filter(start >= range[1], end <= range[2]) %>%
-                                select(signal)))
+      mean.bed <- mean(unlist(bed.sub[start >= range[1] & end <= range[2],"signal"]))
       tmb <- mean(unlist(gen.sub %>%
                            filter(chromosome_start >= range[1], chromosome_end <= range[2]) %>%
                            group_by(as.character(submitted_sample_id)) %>%
@@ -52,11 +59,11 @@ get_gene_chrom_TMB <- function(bed,gen,map,seg.size){
       return(out)
     })))
     colnames(info)[5:6] <- c("ChromAccess","TMB")
-    final <- rbind(final,info)
+    # final <- rbind(final,info)
     gc()
-    # return(info)
+    return(info)
   }
   #)
-  return(final)
-  # return(data.table(do.call('rbind',final)))
+  # return(final)
+  return(data.table(do.call('rbind',final)))
 }

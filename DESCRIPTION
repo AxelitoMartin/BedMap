@@ -15,4 +15,6 @@ Imports:
     variantprobs
 Depends: 
     dplyr,
-    data.table
+    data.table,
+    foreach,
+    doParallel
