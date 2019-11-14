@@ -35,6 +35,7 @@ get_gene_chrom_TMB <- function(bed,gen,map,seg.size){
       mutate_all(as.numeric)
 
     info <- as.data.frame(t(apply(map.sub,1,function(y){
+      print(as.character(y[1]))
       range <- c(as.numeric(y[3])-seg.size,as.numeric(y[4])+seg.size)
       mean.bed <- mean(unlist(bed.sub %>%
                                 filter(start >= range[1], end <= range[2]) %>%
