@@ -43,7 +43,7 @@ get_gene_chrom_TMB <- function(bed,gen,map,seg.size,cores=1){
     gen.sub <- gen[chromosome == x,]
     map.sub <- map[chrom == paste0("chr",x),]
 
-    info <- as.data.frame(t(apply(map.sub,1,function(y){
+    info <- as.data.frame(t(apply(map.sub[1:5,],1,function(y){
       cat(as.character(y[1]))
       range <- c(as.numeric(y[3])-seg.size,as.numeric(y[4])+seg.size)
       mean.bed <- mean(unlist(bed.sub[start >= range[1] & end <= range[2],"signal"]))
