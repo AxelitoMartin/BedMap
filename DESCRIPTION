@@ -16,4 +16,4 @@ Imports:
 Depends: 
     dplyr,
     data.table,
-    parallel
+    snow
