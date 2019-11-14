@@ -16,5 +16,4 @@ Imports:
 Depends: 
     dplyr,
     data.table,
-    foreach,
-    doParallel
+    parallel
