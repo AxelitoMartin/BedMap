@@ -47,7 +47,7 @@ get_gene_chrom_TMB <- function(bed,gen,map,seg.size){
 
       out <- c(unlist(y),mean.bed,tmb)
       out[3:6] <- as.numeric(out[3:6])
-      gc()
+      # gc()
       return(out)
     })))
     colnames(info)[5:6] <- c("ChromAccess","TMB")
