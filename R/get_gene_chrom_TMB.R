@@ -42,9 +42,7 @@ get_gene_chrom_TMB <- function(bed,gen,map,seg.size,cores=1){
     gen.sub <- gen[chromosome == x,]
     map.sub <- map[chrom == paste0("chr",x),]
 
-    info <- data.table(do.call('rbind',parLapply(cl,1:5,function(y,map.sub,bed.sub,gen.sub,seg.size){
-      library(data.table)
-      library(dplyr)
+    info <- data.table(do.call('rbind',parLapply(cl,1:nrow(map.sub),function(y,map.sub,bed.sub,gen.sub,seg.size){
       y <- map.sub[y,]
       # cat(as.character(y[1]))
       range <- c(as.numeric(y[,3])-seg.size,as.numeric(y[,4])+seg.size)
@@ -81,7 +79,7 @@ get_gene_chrom_TMB <- function(bed,gen,map,seg.size,cores=1){
     # colnames(info)[5:6] <- c("ChromAccess","TMB")
     # final <- rbind(final,info)
 
-    gc()
+    # gc()
     # return(info)
   }
   #)
