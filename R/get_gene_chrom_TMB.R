@@ -23,7 +23,7 @@ get_gene_chrom_TMB <- function(bed,gen,map,seg.size,cores=1){
   cl <- makeCluster(cores,outfile="progress.txt")
   registerDoParallel(cl)
 
-  foreach(x=c(1:22,"X")){
+  final <- foreach(x=c(1:22,"X")) %dopar% {
     cat(x)
 
     # # sub map #
