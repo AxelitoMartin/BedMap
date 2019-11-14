@@ -16,7 +16,7 @@
 
 get_gene_chrom_TMB <- function(bed,gen,map,seg.size,cores=1){
 
-  # cl <- makeCluster(cores,outfile="progress.txt")
+  cl <- makeCluster(cores,outfile="progress.txt")
   # registerDoParallel(cl)
 
   # final <- lapply(c(1:22,"X"),function(x){
@@ -81,7 +81,7 @@ get_gene_chrom_TMB <- function(bed,gen,map,seg.size,cores=1){
     # colnames(info)[5:6] <- c("ChromAccess","TMB")
     # final <- rbind(final,info)
 
-    # gc()
+    gc()
     # return(info)
   }
   #)
