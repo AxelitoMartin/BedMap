@@ -26,7 +26,7 @@ get_gene_chrom_TMB <- function(bed,gen,map,seg.size,cores=1){
     print("Data processed")
     info <- data.table(do.call('rbind',lapply(1:nrow(map.sub),function(y,map.sub,bed.sub,gen.sub,seg.size){
       y <- map.sub[y,]
-      print(as.character(y[1]))
+      # print(as.character(y[1]))
       range <- c(as.numeric(y[,3])-seg.size,as.numeric(y[,4])+seg.size)
       mean.bed <- mean(unlist(bed.sub[start >= range[1] & end <= range[2],"signal"]))
       tmb <- mean(unlist(gen.sub %>%
