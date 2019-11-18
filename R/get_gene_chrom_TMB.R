@@ -17,7 +17,7 @@
 get_gene_chrom_TMB <- function(bed,gen,map,seg.size,cores=1){
 
   final <- data.frame()
-
+  n <- length(unique(gen$submitted_sample_id))
   for(x in c(1:22,"X")){ # 1:22,"X"
     print(x)
     bed.sub <- bed[Chromosome == paste0("chr",x),c("start","end","signal")]
@@ -29,11 +29,14 @@ get_gene_chrom_TMB <- function(bed,gen,map,seg.size,cores=1){
       # print(as.character(y[1]))
       range <- c(as.numeric(y[,3])-seg.size,as.numeric(y[,4])+seg.size)
       mean.bed <- mean(unlist(bed.sub[start >= range[1] & end <= range[2],"signal"]))
-      tmb <- mean(unlist(gen.sub %>%
-                           filter(chromosome_start >= range[1], chromosome_end <= range[2]) %>%
-                           group_by(as.character(submitted_sample_id)) %>%
-                           summarise(N = n()) %>%
-                           select(N)))
+      tmb <- nrow(gen.sub %>%
+                    filter(chromosome_start >= range[1], chromosome_end <= range[2]))/n
+
+      # tmb <- mean(unlist(gen.sub %>%
+      #                      filter(chromosome_start >= range[1], chromosome_end <= range[2]) %>%
+      #                      group_by(as.character(submitted_sample_id)) %>%
+      #                      summarise(N = n()) %>%
+      #                      select(N)))
 
       out <- c(unlist(y),mean.bed,tmb)
       out[3:6] <- as.numeric(out[3:6])
