@@ -12,7 +12,7 @@
 gene_plot <- function(dat,lim.C,lim.T){
   final.all <- dat %>%
     tbl_df() %>%
-    mutate(ChromAccess = -as.numeric(DNaseI),
+    mutate(ChromAccess = as.numeric(DNaseI),
            TMB = as.numeric(MutCount)) %>%
     group_by(gene,chrom) %>%
     summarise(ChromAccess = mean(ChromAccess),
