@@ -15,7 +15,7 @@
 
 chrom_profile <- function(bed,gen,seg.size){
 
-  final <- data.table(do.call('rbind',lapply(c(1:2),function(x){ #c(1:22,"X")
+  final <- data.table(do.call('rbind',lapply(c(1:22,"X"),function(x){ #c(1:22,"X")
     print(x)
     ############
 
@@ -41,10 +41,10 @@ chrom_profile <- function(bed,gen,seg.size){
     full.dat <- full_join(mut.summary,bed.sub,"Position")
     full.dat$DNaseI[abs(full.dat$DNaseI) > 2000] <- NA
     full.dat <- full.dat[complete.cases(full.dat),]
-    scaled.full <- as.data.frame(scale(full.dat %>%
-                                         select(MutCount,DNaseI)))
-    scaled.full$Position <- full.dat$Position
-    return(scaled.full)
+    # scaled.full <- as.data.frame(scale(full.dat %>%
+    #                                      select(MutCount,DNaseI)))
+    # scaled.full$Position <- full.dat$Position
+    return(full.dat)
   })))
   return(final)
 }
