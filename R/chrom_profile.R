@@ -15,6 +15,7 @@
 
 chrom_profile <- function(bed,gen,seg.size){
 
+  n <- length(unique(gen$submitted_sample_id))
   final <- data.table(do.call('rbind',lapply(c(1:22,"X"),function(x){ #c(1:22,"X")
     print(x)
     ############
@@ -23,7 +24,7 @@ chrom_profile <- function(bed,gen,seg.size){
       # filter(chromosome == x) %>%
       mutate(Position = trunc(chromosome_start/(seg.size))) %>%
       group_by(Position) %>%
-      summarise(N = n()/length(unique(submitted_sample_id))) %>%
+      summarise(N = n()/n) %>%
       rename(MutCount = N) %>%
       select(Position,MutCount)
 
