@@ -15,12 +15,12 @@
 
 chrom_profile <- function(bed,gen,seg.size){
 
-  final <- data.table(do.call('rbind',lapply(c(1:22,"X"),function(x){
+  final <- data.table(do.call('rbind',lapply(c(1:2),function(x){ #c(1:22,"X")
     print(x)
     ############
 
-    mut.summary <- gen %>%
-      filter(chromosome == x) %>%
+    mut.summary <- gen[chromosome == x,] %>%
+      # filter(chromosome == x) %>%
       mutate(Position = trunc(chromosome_start/(seg.size))) %>%
       group_by(Position) %>%
       summarise(N = n()/length(unique(submitted_sample_id))) %>%
@@ -28,9 +28,9 @@ chrom_profile <- function(bed,gen,seg.size){
       select(Position,MutCount)
 
     # subset to that chromosome #
-    bed.sub <- bed %>%
-      filter(Chromosome == paste0("chr",x)) %>%
-      select(start,end,signal) %>%
+    bed.sub <- bed[Chromosome == paste0("chr",x),c("start","end","signal")]  %>%
+      # filter(Chromosome == paste0("chr",x)) %>%
+      # select(start,end,signal) %>%
       mutate(Position = trunc(start/seg.size)) %>%
       mutate_all(as.numeric) %>%
       group_by(Position) %>%
