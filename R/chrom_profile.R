@@ -20,27 +20,27 @@ chrom_profile <- function(bed,gen,seg.size){
     print(x)
     ############
 
-    mut.summary <- gen[chromosome == x,] %>%
-      # filter(chromosome == x) %>%
+    mut.summary <- gen %>%
+      filter(chromosome == x) %>%
       mutate(Position = trunc(chromosome_start/(seg.size))) %>%
       group_by(Position) %>%
-      summarise(N = n()/n) %>%
+      summarise(N = n()) %>%
       rename(MutCount = N) %>%
       select(Position,MutCount)
 
     # subset to that chromosome #
-    bed.sub <- bed[Chromosome == paste0("chr",x),c("start","end","signal")]  %>%
-      # filter(Chromosome == paste0("chr",x)) %>%
-      # select(start,end,signal) %>%
+    bed.sub <- bed %>%
+      filter(Chromosome == paste0("chr",x)) %>%
+      select(start,end,signal) %>%
       mutate(Position = trunc(start/seg.size)) %>%
       mutate_all(as.numeric) %>%
       group_by(Position) %>%
-      summarise(DNaseI = -mean(signal)) %>%
+      summarise(DNaseI = -sum(signal)) %>% #-mean(signal)
       ungroup() %>%
       select(Position, DNaseI)
 
     full.dat <- full_join(mut.summary,bed.sub,"Position")
-    full.dat$DNaseI[abs(full.dat$DNaseI) > 2000] <- NA
+    # full.dat$DNaseI[abs(full.dat$DNaseI) > 2000] <- NA
     full.dat <- full.dat[complete.cases(full.dat),]
     full.dat$chrom <- rep(x,nrow(full.dat))
     # scaled.full <- as.data.frame(scale(full.dat %>%
