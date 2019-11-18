@@ -41,6 +41,7 @@ chrom_profile <- function(bed,gen,seg.size){
     full.dat <- full_join(mut.summary,bed.sub,"Position")
     full.dat$DNaseI[abs(full.dat$DNaseI) > 2000] <- NA
     full.dat <- full.dat[complete.cases(full.dat),]
+    full.dat$chrom <- rep(x,nrow(full.dat))
     # scaled.full <- as.data.frame(scale(full.dat %>%
     #                                      select(MutCount,DNaseI)))
     # scaled.full$Position <- full.dat$Position
