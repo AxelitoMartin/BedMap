@@ -12,7 +12,7 @@
 #'@export
 #'
 
-bed_chrom <- function(bed,seg.size){
+bed_chrom <- function(bed,seg.size,upp.bound=200){
 
   final <- data.table(do.call('rbind',lapply(c(21:22),function(x){ #c(1:22,"X")
     print(x)
@@ -24,7 +24,8 @@ bed_chrom <- function(bed,seg.size){
       mutate(Position = trunc(start/seg.size)) %>%
       mutate_all(as.numeric) %>%
       group_by(Position) %>%
-      summarise(DNaseI = -sum(signal)) %>% #-mean(signal)
+      mutate(signal = ifelse(signal > upp.bound, NA, signal)) %>%
+      summarise(DNaseI = sum(signal,na.rm = T)) %>% #-mean(signal)
       ungroup() %>%
       select(Position, DNaseI)
 
