@@ -28,9 +28,9 @@ bed_chrom <- function(bed,seg.size){
       ungroup() %>%
       select(Position, DNaseI)
 
-    full.dat <- full.dat[complete.cases(full.dat),]
-    full.dat$chrom <- rep(x,nrow(full.dat))
-    return(full.dat)
+    # full.dat <- full.dat[complete.cases(full.dat),]
+    bed.sub$chrom <- rep(x,nrow(bed.sub))
+    return(bed.sub)
   })))
   return(final)
 }
