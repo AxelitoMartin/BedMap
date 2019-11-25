@@ -14,7 +14,7 @@
 
 bed_chrom <- function(bed,seg.size,upp.bound=200){
 
-  final <- data.table(do.call('rbind',lapply(c(1:22,"X"),function(x){ #c(1:22,"X")
+  final <- data.table(do.call('rbind',lapply(c(21:22,"X"),function(x){ #c(1:22,"X")
     print(x)
     ############
     # subset to that chromosome #
