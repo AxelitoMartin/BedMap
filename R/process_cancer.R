@@ -21,6 +21,7 @@ process_cancer <- function(cancer,path,output.path){
   count <- 1
   for(i in files){
     bed <- readRDS(paste0(path,"data/",cancer,"/Chrom/",i))
+    gc()
     if(i == files[1]){
       first <- bed_chrom(bed,seg.size=10^6)
       colnames(first)[match("DNaseI",colnames(first))] <- paste0("file",count)
@@ -56,6 +57,7 @@ process_cancer <- function(cancer,path,output.path){
   count <- 1
   for(i in files){
     bed <- readRDS(paste0(path,"data/",cancer,"/H3K4me1/",i))
+    gc()
     if(i == files[1]){
       first <- bed_chrom(bed,seg.size=10^6)
       colnames(first)[match("DNaseI",colnames(first))] <- paste0("file",count)
@@ -93,6 +95,7 @@ process_cancer <- function(cancer,path,output.path){
   count <- 1
   for(i in files){
     bed <- readRDS(paste0(path,"data/",cancer,"/H3K36me3/",i))
+    gc()
     if(i == files[1]){
       first <- bed_chrom(bed,seg.size=10^6)
       colnames(first)[match("DNaseI",colnames(first))] <- paste0("file",count)
