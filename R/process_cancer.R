@@ -16,6 +16,7 @@
 process_cancer <- function(cancer,path,output.path){
 
   # chrom #
+  print(paste0(path,"data/Chrom/"))
   files <- list.files(paste0(path,"data/Chrom/"))
   print(files)
   count <- 1
