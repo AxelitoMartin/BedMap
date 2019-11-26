@@ -17,7 +17,7 @@ process_cancer <- function(cancer,path,output.path){
 
   # chrom #
   print(paste0(path,"data/Chrom/"))
-  files <- list.files(paste0(path,"data/Chrom/"))
+  files <- list.files(paste0(path,cancer,"/data/Chrom/"))
   print(files)
   count <- 1
   for(i in files){
@@ -53,7 +53,7 @@ process_cancer <- function(cancer,path,output.path){
 
   ######################################################
   # H3K4me1 #
-  files <- list.files(paste0(path,"data/H3K4me1/"))
+  files <- list.files(paste0(path,cancer,"data/H3K4me1/"))
   count <- 1
   for(i in files){
     bed <- readRDS(paste0("data/",cancer,"/H3K4me1/",i))
@@ -90,7 +90,7 @@ process_cancer <- function(cancer,path,output.path){
 
   #######################################################
   # H3K36me3 #
-  files <- list.files(paste0(path,"data/H3K36me3/"))
+  files <- list.files(paste0(path,cancer,"data/H3K36me3/"))
   count <- 1
   for(i in files){
     bed <- readRDS(paste0("data/",cancer,"/H3K36me3/",i))
