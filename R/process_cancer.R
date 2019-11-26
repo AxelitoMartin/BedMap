@@ -44,7 +44,7 @@ process_cancer <- function(cancer,path,output.path){
     temp <- temp %>%
       select(chrom,Position,paste0("file",1:length(files)))
     temp$Chromatin <- apply(temp,1,function(x){
-      median(x[3:ncol(temp)],rm.na=T)
+      median(as.numeric(as.character(x[3:ncol(temp)])),rm.na=T)
     })
   }
   if(length(files) == 1){ colnames(temp)[ncol(temp)] <- "Chromatin"}
@@ -81,7 +81,7 @@ process_cancer <- function(cancer,path,output.path){
     temp <- temp %>%
       select(chrom,Position,paste0("file",1:length(files)))
     temp$H3K4me1 <- apply(temp,1,function(x){
-      mean(x[3:ncol(temp)],rm.na=T)
+      median(as.numeric(as.character(x[3:ncol(temp)])),rm.na=T)
     })
   }
   if(length(files) == 1){ colnames(temp)[ncol(temp)] <- "H4K3me1"}
@@ -119,7 +119,7 @@ process_cancer <- function(cancer,path,output.path){
     temp <- temp %>%
       select(chrom,Position,paste0("file",1:length(files)))
     temp$H3K36me3 <- apply(temp,1,function(x){
-      mean(x[3:ncol(temp)],rm.na=T)
+      median(as.numeric(as.character(x[3:ncol(temp)])),rm.na=T)
     })
   }
   if(length(files) == 1){ colnames(temp)[ncol(temp)] <- "H3K36me3"}
