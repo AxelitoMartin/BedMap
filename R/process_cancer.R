@@ -36,12 +36,16 @@ process_cancer <- function(cancer,path,output.path){
       temp <- full_join(temp,chrom ,by = c("chrom","Position"))
     }
     count <- count + 1
+    gc()
   }
-  temp <- temp %>%
-    select(chrom,Position,paste0("file",1:length(files)))
-  temp$Chromatin <- apply(temp,1,function(x){
-    mean(x[3:ncol(temp)],rm.na=T)
-  })
+  if(length(files) > 1){
+    temp <- temp %>%
+      select(chrom,Position,paste0("file",1:length(files)))
+    temp$Chromatin <- apply(temp,1,function(x){
+      median(x[3:ncol(temp)],rm.na=T)
+    })
+  }
+  if(length(files) == 1){ colnames(temp)[ncol(temp)] <- "Chromatin"}
   Chrom <- temp %>% select(chrom,Position,Chromatin)
 
 
@@ -67,22 +71,27 @@ process_cancer <- function(cancer,path,output.path){
       temp <- full_join(temp,chrom ,by = c("chrom","Position"))
     }
     count <- count + 1
+    gc()
   }
-  temp <- temp %>%
-    select(chrom,Position,paste0("file",1:length(files)))
-  temp$H3K4me1 <- apply(temp,1,function(x){
-    mean(x[3:ncol(temp)],rm.na=T)
-  })
+
+  if(length(files) > 1){
+    temp <- temp %>%
+      select(chrom,Position,paste0("file",1:length(files)))
+    temp$H3K4me1 <- apply(temp,1,function(x){
+      mean(x[3:ncol(temp)],rm.na=T)
+    })
+  }
+  if(length(files) == 1){ colnames(temp)[ncol(temp)] <- "H4K3me1"}
   H3K4me1 <- temp %>% select(chrom,Position,H3K4me1)
   fulldat <- full_join(Chrom,H3K4me1 ,by = c("chrom","Position"))
 
 
   #######################################################
-  # H3K36me36 #
-  files <- list.files(paste0(path,"/H3K36me36/"))
+  # H3K36me3 #
+  files <- list.files(paste0(path,"/H3K36me3/"))
   count <- 1
   for(i in files){
-    bed <- readRDS(here(paste0("data/",cancer,"/H3K36me36/",i)))
+    bed <- readRDS(here(paste0("data/",cancer,"/H3K36me3/",i)))
     if(i == files[1]){
       first <- bed_chrom(bed,seg.size=10^6)
       colnames(first)[match("DNaseI",colnames(first))] <- paste0("file",count)
@@ -99,14 +108,19 @@ process_cancer <- function(cancer,path,output.path){
       temp <- full_join(temp,chrom ,by = c("chrom","Position"))
     }
     count <- count + 1
+    gc()
   }
-  temp <- temp %>%
-    select(chrom,Position,paste0("file",1:length(files)))
-  temp$H3K36me36 <- apply(temp,1,function(x){
-    mean(x[3:ncol(temp)],rm.na=T)
-  })
-  H3K36me36 <- temp %>% select(chrom,Position,H3K36me36)
-  fulldat <- full_join(fulldat,H3K36me36 ,by = c("chrom","Position"))
+
+  if(length(files) > 1){
+    temp <- temp %>%
+      select(chrom,Position,paste0("file",1:length(files)))
+    temp$H3K36me3 <- apply(temp,1,function(x){
+      mean(x[3:ncol(temp)],rm.na=T)
+    })
+  }
+  if(length(files) == 1){ colnames(temp)[ncol(temp)] <- "H3K36me3"}
+  H3K36me3 <- temp %>% select(chrom,Position,H3K36me3)
+  fulldat <- full_join(fulldat,H3K36me3 ,by = c("chrom","Position"))
 
   saveRDS(fulldat,file = paste0(output.path,cancer,"_mean.rds"))
 
