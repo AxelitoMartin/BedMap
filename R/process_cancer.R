@@ -49,7 +49,7 @@ process_cancer <- function(cancer,path,output.path){
   }
   if(length(files) == 1){ colnames(temp)[ncol(temp)] <- "Chromatin"}
   Chrom <- temp %>% select(chrom,Position,Chromatin)
-
+  print("Chrom done")
 
   ######################################################
   # H3K4me1 #
@@ -87,7 +87,7 @@ process_cancer <- function(cancer,path,output.path){
   if(length(files) == 1){ colnames(temp)[ncol(temp)] <- "H4K3me1"}
   H3K4me1 <- temp %>% select(chrom,Position,H3K4me1)
   fulldat <- full_join(Chrom,H3K4me1 ,by = c("chrom","Position"))
-
+  print("H3K4me1 done")
 
   #######################################################
   # H3K36me3 #
@@ -125,6 +125,7 @@ process_cancer <- function(cancer,path,output.path){
   if(length(files) == 1){ colnames(temp)[ncol(temp)] <- "H3K36me3"}
   H3K36me3 <- temp %>% select(chrom,Position,H3K36me3)
   fulldat <- full_join(fulldat,H3K36me3 ,by = c("chrom","Position"))
+  print("H3K36me3 done")
 
   saveRDS(fulldat,file = paste0(output.path,cancer,"_mean.rds"))
 
