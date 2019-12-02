@@ -80,6 +80,7 @@ process_cancer <- function(cancer,path,output.path){
     gc()
   }
 
+  if(length(files) == 1) temp <- first
   if(length(files) > 1){
     temp <- temp %>%
       select(chrom,Position,paste0("file",1:length(files)))
@@ -120,6 +121,7 @@ process_cancer <- function(cancer,path,output.path){
     gc()
   }
 
+  if(length(files) == 1) temp <- first
   if(length(files) > 1){
     temp <- temp %>%
       select(chrom,Position,paste0("file",1:length(files)))
