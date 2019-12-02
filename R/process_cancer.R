@@ -91,14 +91,14 @@ process_cancer <- function(cancer,path,output.path){
   if(length(files) == 1){
     temp <- first %>%
       select(chrom,Position,paste0("file",1:length(files)))
-    colnames(temp)[ncol(temp)] <- "H4K3me1"
+    colnames(temp)[ncol(temp)] <- "H3K4me1"
   }
   print(colnames(temp))
   print(head(temp))
   H3K4me1 <- temp %>% select(chrom,Position,H3K4me1)
 
   if(is.null(Chrom)) fulldat <- H3K4me1
-  else fulldat <- full_join(Chrom,H3K4me1 ,by = c("chrom","Position"))
+  if(!is.null(Chrom)) fulldat <- full_join(Chrom,H3K4me1 ,by = c("chrom","Position"))
   print("H3K4me1 done")
 
   #######################################################
