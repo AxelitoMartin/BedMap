@@ -80,7 +80,7 @@ process_cancer <- function(cancer,path,output.path){
     gc()
   }
 
-  if(length(files) == 1) temp <- first
+
   if(length(files) > 1){
     temp <- temp %>%
       select(chrom,Position,paste0("file",1:length(files)))
@@ -88,10 +88,15 @@ process_cancer <- function(cancer,path,output.path){
       median(as.numeric(as.character(x[3:ncol(temp)])),rm.na=T)
     })
   }
-  if(length(files) == 1){ colnames(temp)[ncol(temp)] <- "H4K3me1"}
+  if(length(files) == 1){
+    temp <- first
+    colnames(temp)[ncol(temp)] <- "H4K3me1"
+  }
+  print(colnames(temp))
   H3K4me1 <- temp %>% select(chrom,Position,H3K4me1)
 
   if(is.null(Chrom)) fulldat <- H3K4me1
+  else fulldat <- full_join(Chrom,H3K4me1 ,by = c("chrom","Position"))
   print("H3K4me1 done")
 
   #######################################################
