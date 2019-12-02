@@ -56,6 +56,7 @@ process_cancer <- function(cancer,path,output.path){
   ######################################################
   # H3K4me1 #
   files <- list.files(paste0(path,"/data/",cancer,"/H3K4me1/"))
+  print(files)
   count <- 1
   for(i in files){
     bed <- readRDS(paste0(path,"data/",cancer,"/H3K4me1/",i))
@@ -95,6 +96,7 @@ process_cancer <- function(cancer,path,output.path){
   #######################################################
   # H3K36me3 #
   files <- list.files(paste0(path,"/data/",cancer,"/H3K36me3/"))
+  print(files)
   count <- 1
   for(i in files){
     bed <- readRDS(paste0(path,"data/",cancer,"/H3K36me3/",i))
