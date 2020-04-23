@@ -10,10 +10,12 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Imports: 
-    variantprobs
-Depends: 
     dplyr,
+    dtplyr,
     data.table,
-    snow
+    snow,
+    ggplot2,
+    cowplot
+Depends: R (>= 3.6)
